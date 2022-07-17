@@ -1,0 +1,8 @@
+The following files were created by user tipam (https://www.thingiverse.com/tipam). They
+are licensed by CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+They were converted to .gltf format from .obj.
+archeryrange.gltf https://www.thingiverse.com/thing:4159892
+siegeworkshop.gltf https://www.thingiverse.com/thing:4146135
+barracks.gltf https://www.thingiverse.com/thing:4235166
+towncenter.gltf https://www.thingiverse.com/thing:4142899
+---
