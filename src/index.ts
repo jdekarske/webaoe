@@ -8,6 +8,11 @@ import { ModelCache, resolveModelPaths } from "./models";
 import Stats from 'stats.js';
 import { GUI } from "dat.gui";
 
+interface aoeGame_params {
+    dom?: HTMLCanvasElement,
+    debug?: boolean,
+}
+
 export class aoeGame extends Scene {
     // aoe relevant params
     public elevationScale = 0.3;
@@ -27,24 +32,28 @@ export class aoeGame extends Scene {
     public _datGUI: GUI;
     private _stats: Stats;
 
-    constructor(protected debug = false) {
-        super()
-        this.debug = debug;
+    protected debug = false;
+    private _dom: HTMLCanvasElement;
 
-        this._defaultRenderer = new WebGLRenderer();
+    constructor(params: aoeGame_params) {
+        super()
+        this._dom = params.dom || document.appendChild(document.createElement('canvas'))
+        this.debug = params.debug || false;
+
+        this._defaultRenderer = new WebGLRenderer({ antialias: true, canvas: this._dom });
         this._defaultRenderer.setClearColor(0x000000, 0); // the default
         this._defaultRenderer.setPixelRatio(window.devicePixelRatio);
-        this._defaultRenderer.setSize(window.innerWidth, window.innerHeight);
         this._defaultRenderer.outputEncoding = sRGBEncoding;
         this._defaultRenderer.shadowMap.enabled = true;
         this._defaultRenderer.shadowMap.autoUpdate = false;
-        document.body.appendChild(this._defaultRenderer.domElement);
+        this._defaultRenderer.domElement = this._dom
+        this._defaultRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
 
-        this._defaultLabelRenderer = new CSS2DRenderer();
-        this._defaultLabelRenderer.setSize(window.innerWidth, window.innerHeight);
+
+        this._defaultLabelRenderer = new CSS2DRenderer({ element: this._dom });
+        this._defaultLabelRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
         this._defaultLabelRenderer.domElement.style.position = 'absolute';
         this._defaultLabelRenderer.domElement.style.top = '0px';
-        document.body.appendChild(this._defaultLabelRenderer.domElement);
 
         window.addEventListener("resize", this.onWindowResize.bind(this), false);
 
@@ -62,7 +71,7 @@ export class aoeGame extends Scene {
         this._defaultCamera.position.set(20, 30, 20);
         this.add(this._defaultCamera);
 
-        this._defaultControls = new OrbitControls(this._defaultCamera, this._defaultLabelRenderer.domElement);
+        this._defaultControls = new OrbitControls(this._defaultCamera, this._dom);
         this._defaultControls.target = new Vector3(this._mapSize / 2, 0, this._mapSize / 2);
         this._defaultControls.autoRotate = true;
         this._defaultControls.update()
@@ -95,8 +104,8 @@ export class aoeGame extends Scene {
         this._defaultCamera.aspect = window.innerWidth / window.innerHeight;
         this._defaultCamera.updateProjectionMatrix();
 
-        this._defaultRenderer.setSize(window.innerWidth, window.innerHeight);
-        this._defaultLabelRenderer.setSize(window.innerWidth, window.innerHeight);
+        this._defaultRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
+        this._defaultLabelRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
         this.animate();
     }
 
@@ -108,8 +117,9 @@ export class aoeGame extends Scene {
         this._defaultControls.update();
 
         this._defaultRenderer.render(this, this._defaultCamera);
-        this._defaultLabelRenderer.render(this, this._defaultCamera);
-
+        if (!this.debug) {
+            this._defaultLabelRenderer.render(this, this._defaultCamera);
+        }
         this._stats.end();
     }
 
