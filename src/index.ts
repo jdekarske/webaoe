@@ -148,6 +148,8 @@ export class aoeGame extends Scene {
             return null;
         });
 
+        uniqueModels.forEach(element => console.log(element.name, element.count));
+
         // try and load the models for gaia objects
         let resolutionErrors: any = [];
         const allpromises = Promise.all(uniqueModels.map(async (model) => {
