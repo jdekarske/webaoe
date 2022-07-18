@@ -1,8 +1,11 @@
 import { Scene } from "three";
 import { aoeInputData } from "./loaders";
 import { GUI } from "dat.gui";
+interface aoeGame_params {
+    dom?: HTMLCanvasElement;
+    debug?: boolean;
+}
 export declare class aoeGame extends Scene {
-    protected debug: boolean;
     elevationScale: number;
     protected _mapSize: number;
     private _defaultRenderer;
@@ -14,7 +17,10 @@ export declare class aoeGame extends Scene {
     private mapData;
     _datGUI: GUI;
     private _stats;
-    constructor(debug?: boolean);
+    protected debug: boolean;
+    private _dom;
+    private _domParent;
+    constructor(params: aoeGame_params);
     protected onWindowResize(): void;
     animate(): void;
     loadMap(mapFile: string): Promise<aoeInputData>;
@@ -23,3 +29,4 @@ export declare class aoeGame extends Scene {
     loadGaia(): void;
     protected set mapSize(newSize: number);
 }
+export {};
