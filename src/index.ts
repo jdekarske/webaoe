@@ -34,10 +34,12 @@ export class aoeGame extends Scene {
 
     protected debug = false;
     private _dom: HTMLCanvasElement;
+    private _domParent: HTMLElement;
 
     constructor(params: aoeGame_params) {
         super()
         this._dom = params.dom || document.appendChild(document.createElement('canvas'))
+        this._domParent = this._dom.parentElement!;
         this.debug = params.debug || false;
 
         this._defaultRenderer = new WebGLRenderer({ antialias: true, canvas: this._dom });
@@ -47,11 +49,11 @@ export class aoeGame extends Scene {
         this._defaultRenderer.shadowMap.enabled = true;
         this._defaultRenderer.shadowMap.autoUpdate = false;
         this._defaultRenderer.domElement = this._dom
-        this._defaultRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
+        this._defaultRenderer.setSize(this._domParent.offsetWidth, this._domParent.offsetHeight);
 
 
         this._defaultLabelRenderer = new CSS2DRenderer({ element: this._dom });
-        this._defaultLabelRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
+        this._defaultLabelRenderer.setSize(this._domParent.offsetWidth, this._domParent.offsetHeight);
         this._defaultLabelRenderer.domElement.style.position = 'absolute';
         this._defaultLabelRenderer.domElement.style.top = '0px';
 
@@ -67,7 +69,7 @@ export class aoeGame extends Scene {
         this._defaultLights.add(plight);
         this.add(this._defaultLights);
 
-        this._defaultCamera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
+        this._defaultCamera = new PerspectiveCamera(70, this._domParent.offsetWidth / this._domParent.offsetHeight, 0.01, 1000);
         this._defaultCamera.position.set(20, 30, 20);
         this.add(this._defaultCamera);
 
@@ -101,11 +103,11 @@ export class aoeGame extends Scene {
     }
 
     protected onWindowResize(): void {
-        this._defaultCamera.aspect = window.innerWidth / window.innerHeight;
+        this._defaultCamera.aspect = this._domParent.offsetWidth / this._domParent.offsetHeight;
         this._defaultCamera.updateProjectionMatrix();
 
-        this._defaultRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
-        this._defaultLabelRenderer.setSize(this._dom.offsetWidth, this._dom.offsetHeight);
+        this._defaultRenderer.setSize(this._domParent.offsetWidth, this._domParent.offsetHeight);
+        this._defaultLabelRenderer.setSize(this._domParent.offsetWidth, this._domParent.offsetHeight);
         this.animate();
     }
 
