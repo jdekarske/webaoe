@@ -38,9 +38,9 @@
     "dependencies": {
         "@types/dat.gui": "^0.7.7",
         "@types/stats.js": "^0.17.0",
-        "@types/three": "^0.136.1",
+        "@types/three": "^0.143.0",
         "dat.gui": "^0.7.9",
         "stats.js": "^0.17.0",
-        "three": "^0.136.0"
+        "three": "^0.143.0"
     }
 }
