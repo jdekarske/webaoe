@@ -21,11 +21,14 @@ const copyPluginPatterns = {
 // Dev server setup
 // https://webpack.js.org/configuration/dev-server/
 const devServer = {
-    contentBase: outputConfig.destPath,
-    // https: true,
-    // port: "8080",
-    // host: "0.0.0.0",
-    // disableHostCheck: true
+    static: {
+        directory: outputConfig.destPath,
+        // https: true,
+        // port: "8080",
+        // host: "0.0.0.0",
+        // disableHostCheck: true
+            
+    }
 };
 
 // Production terser config options
